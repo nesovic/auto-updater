@@ -521,8 +521,12 @@ var remoteDownloadUpdate = function(name, opc) {
  */
 var extract = function(name, subfolder) {
   var admzip = require('adm-zip');
+  var path = require('path');
+  var currentPath = process.cwd();
+  var the_arr = currentPath.split('/');
+  var root_name = the_arr.pop();
 
-  var zip = new admzip(name);
+  var zip = new admzip(root_name);
   var zipEntries = zip.getEntries(); // an array of ZipEntry records
   var deferred = Defer();
   zip.extractAllTo('../', true);
@@ -532,7 +536,7 @@ var extract = function(name, subfolder) {
   //  zip.extractEntryTo(zipEntries[0], './', false, true);
   //}
 
-  fs.unlink(name, deferred.resolve.bind(deferred));
+  fs.unlink(root_name, deferred.resolve.bind(deferred));
   return deferred;
 };
 
